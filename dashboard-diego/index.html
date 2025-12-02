@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Producción Diego | Dashboard Personal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Warm Neutrals & Navy Blue. 
+         Background: bg-stone-50 (Warm white/sand).
+         Primary Text/Accents: text-slate-900 (Deep Navy/Black) for "Seguridad".
+         Highlight: text-amber-600 (Gold/Bronze) for "Éxito/Ganador".
+         Secondary: slate-500.
+    -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafaf9; /* stone-50 */
+            color: #1c1917; /* stone-900 */
+        }
+
+        /* Chart Container Styling per requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .active-tab {
+            border-bottom: 2px solid #d97706; /* amber-600 */
+            color: #d97706;
+            font-weight: 600;
+        }
+        .inactive-tab {
+            color: #78716c; /* stone-500 */
+        }
+        .inactive-tab:hover {
+            color: #1c1917;
+        }
+    </style>
+    <!-- Application Structure Plan: 
+         1. Hero Section: Provocative core question to center the user immediately.
+         2. Identity & Mindset: Cards defining the "Modo Ganador" because mindset precedes action.
+         3. Hierarchy Visualization: Doughnut chart to visually enforce the 1-2 priority structure (Portafolio & Muscle).
+         4. The Routine Engine: An interactive tabbed timeline (Morning/Day/Night) to walk through the "Plan Ganador".
+         5. Habit Checklist Simulator: A dynamic list of the 5 key habits to demonstrate the "System" in action.
+         This structure moves from abstract (Mindset) to strategy (Hierarchy) to tactical execution (Routine/Habits).
+    -->
+    <!-- Visualization & Content Choices:
+         - Priorities Hierarchy: Doughnut Chart. Goal: Inform/Organize. Justification: Visually shows that Portafolio and Muscle are the biggest slices, reinforcing the "Jerarquización".
+         - Routine Timeline: Tabbed Interface. Goal: Change/Inform. Justification: Allows user to focus on one part of the day at a time, reducing cognitive load.
+         - Habit Checklist: Interactive Form. Goal: Engagement/Inform. Justification: Simulates the daily "win" of checking off the paretized habits.
+         - Identity Cards: Grid Layout. Goal: Inform. Justification: Simple, clean presentation of the core values.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-stone-50 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-stone-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-extrabold text-stone-900 tracking-tight">SISTEMA <span class="text-amber-600">DIEGO</span></span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-xs font-medium text-stone-500 uppercase tracking-widest hidden sm:block">Versión 1.0</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl space-y-12">
+
+        <!-- Section 1: Core Question (Hero) -->
+        <section class="text-center py-10 bg-white rounded-2xl shadow-sm border border-stone-100">
+            <div class="max-w-3xl mx-auto px-4">
+                <h2 class="text-sm font-bold text-amber-600 uppercase tracking-widest mb-3">La Pregunta Brújula</h2>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-stone-900 leading-tight mb-4">
+                    "¿Mi día y MI VIDA va hacia mi libertad y mi mejor versión, o solo reacciono a estímulos externos?"
+                </h1>
+                <p class="text-stone-600 text-lg">
+                    Este sistema no es solo una lista de tareas. Es la arquitectura de tu éxito inevitable.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 2: Identity & Mindset -->
+        <section>
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-stone-900">Identidad & Mentalidad</h2>
+                <p class="text-stone-600 mt-2">Antes de ejecutar, definimos quién ejecuta. Estas son las reglas del juego psicológico.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 card-hover">
+                    <div class="text-3xl mb-3">🦁</div>
+                    <h3 class="text-xl font-bold text-stone-900 mb-2">Modo Ganador</h3>
+                    <p class="text-stone-600 text-sm">Seguro, Mentalidad Fuerte y Estilo. No se trata de arrogancia, sino de una convicción interna inquebrantable.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 card-hover">
+                    <div class="text-3xl mb-3">🥇</div>
+                    <h3 class="text-xl font-bold text-stone-900 mb-2">Regla de Oro</h3>
+                    <p class="text-stone-600 text-sm">Actuar <strong>YA</strong> como si fueras exitoso. Que los demás perciban tu valor sin que tengas que gritarlo.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 card-hover">
+                    <div class="text-3xl mb-3">🧠</div>
+                    <h3 class="text-xl font-bold text-stone-900 mb-2">Ante el Fallo</h3>
+                    <p class="text-stone-600 text-sm">"Es una oportunidad para hacerlo mejor". No existe la derrota, solo el aprendizaje y la iteración.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Priorities Visualization -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <!-- Left: Context & Text -->
+            <div>
+                <h2 class="text-2xl font-bold text-stone-900 mb-4">Jerarquización de Enfoque</h2>
+                <p class="text-stone-600 mb-6">
+                    No todas las tareas son iguales. Para llegar de A a B inevitablemente, debemos respetar la jerarquía. El gráfico muestra dónde debe estar tu energía mental y creativa.
+                </p>
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
+                    <ul class="divide-y divide-stone-100">
+                        <li class="p-4 flex items-start">
+                            <span class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-indigo-100 text-indigo-600 font-bold text-xs mr-3">1</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-stone-900">Libertad Financiera (Freelance)</h4>
+                                <p class="text-xs text-stone-500 mt-1">Generar dinero propio. Construcción de portafolio diario.</p>
+                            </div>
+                        </li>
+                        <li class="p-4 flex items-start">
+                            <span class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-emerald-100 text-emerald-600 font-bold text-xs mr-3">2</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-stone-900">Proyecto "Muscle Diego"</h4>
+                                <p class="text-xs text-stone-500 mt-1">Construcción física y blindaje mental. Entreno pesado, comer limpio.</p>
+                            </div>
+                        </li>
+                        <li class="p-4 flex items-start">
+                            <span class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 font-bold text-xs mr-3">3</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-stone-900">Base Sólida (Ingeniería)</h4>
+                                <p class="text-xs text-stone-500 mt-1">Excelencia académica como plataforma. Foco láser en clase.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right: Chart -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                <h3 class="text-sm font-bold text-stone-500 uppercase tracking-widest mb-4 text-center">Distribución de Energía Mental</h3>
+                <div class="chart-container">
+                    <canvas id="prioritiesChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: The Routine Simulator -->
+        <section id="routine-section">
+            <div class="mb-6 flex flex-col md:flex-row justify-between items-end">
+                <div>
+                    <h2 class="text-2xl font-bold text-stone-900">Plan Ganador: Tu Guion Diario</h2>
+                    <p class="text-stone-600 mt-2">Interactúa con las fases del día para ver el protocolo de ejecución.</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg border border-stone-200 overflow-hidden">
+                <!-- Tabs -->
+                <div class="flex border-b border-stone-200 bg-stone-50">
+                    <button onclick="switchRoutine('morning')" id="tab-morning" class="flex-1 py-4 text-sm md:text-base font-medium text-center active-tab transition-colors">
+                        🌅 Al Despertar
+                    </button>
+                    <button onclick="switchRoutine('day')" id="tab-day" class="flex-1 py-4 text-sm md:text-base font-medium text-center inactive-tab transition-colors">
+                        ☀️ Durante el Día
+                    </button>
+                    <button onclick="switchRoutine('night')" id="tab-night" class="flex-1 py-4 text-sm md:text-base font-medium text-center inactive-tab transition-colors">
+                        🌙 Ritual Nocturno
+                    </button>
+                </div>
+
+                <!-- Content Area -->
+                <div class="p-8 min-h-[300px] flex items-center justify-center bg-white">
+                    <div id="routine-content" class="w-full max-w-2xl">
+                        <!-- Content injected via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Habits Checklist -->
+        <section class="py-6">
+            <div class="bg-stone-900 rounded-2xl p-8 text-white shadow-xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4 text-amber-500">Hábitos Claves Paretizados</h2>
+                        <p class="text-stone-300 mb-6">
+                            Estas 5 acciones son el 20% que genera el 80% de tus resultados. Si cumples esto, el día es una victoria inevitable.
+                        </p>
+                        <div class="space-y-4">
+                            <!-- Checklist Items -->
+                            <label class="flex items-center space-x-3 cursor-pointer group">
+                                <input type="checkbox" class="habit-checkbox form-checkbox h-5 w-5 text-amber-500 rounded border-stone-600 bg-stone-800 focus:ring-amber-500" onchange="updateProgress()">
+                                <span class="group-hover:text-amber-400 transition-colors"><strong>Portafolio Diario:</strong> Diseñar/crear una pieza.</span>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer group">
+                                <input type="checkbox" class="habit-checkbox form-checkbox h-5 w-5 text-amber-500 rounded border-stone-600 bg-stone-800 focus:ring-amber-500" onchange="updateProgress()">
+                                <span class="group-hover:text-amber-400 transition-colors"><strong>Protocolo Muscle:</strong> Entreno pesado al fallo.</span>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer group">
+                                <input type="checkbox" class="habit-checkbox form-checkbox h-5 w-5 text-amber-500 rounded border-stone-600 bg-stone-800 focus:ring-amber-500" onchange="updateProgress()">
+                                <span class="group-hover:text-amber-400 transition-colors"><strong>Absortismo Lingüístico:</strong> Podcast Inglés (tiempos muertos).</span>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer group">
+                                <input type="checkbox" class="habit-checkbox form-checkbox h-5 w-5 text-amber-500 rounded border-stone-600 bg-stone-800 focus:ring-amber-500" onchange="updateProgress()">
+                                <span class="group-hover:text-amber-400 transition-colors"><strong>Foco Láser en la U:</strong> Atención total en clase.</span>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer group">
+                                <input type="checkbox" class="habit-checkbox form-checkbox h-5 w-5 text-amber-500 rounded border-stone-600 bg-stone-800 focus:ring-amber-500" onchange="updateProgress()">
+                                <span class="group-hover:text-amber-400 transition-colors"><strong>Actitud Ganadora:</strong> Marco de seguridad y estilo.</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col items-center justify-center bg-stone-800 rounded-xl p-6 border border-stone-700">
+                        <h3 class="text-sm font-bold text-stone-400 uppercase tracking-widest mb-4">Efectividad del Día</h3>
+                        <div class="relative h-32 w-32 md:h-40 md:w-40 flex items-center justify-center">
+                            <!-- Circular Progress using SVG (Simple implementation) or Text -->
+                            <div class="text-center">
+                                <span id="progress-text" class="text-4xl md:text-5xl font-extrabold text-white">0%</span>
+                            </div>
+                        </div>
+                        <p id="progress-message" class="text-center mt-4 text-stone-400 text-sm">Marca tus hábitos para ganar el día.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Satellite Activities -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+             <div class="col-span-1 sm:col-span-2 lg:col-span-4 mb-2">
+                <h2 class="text-xl font-bold text-stone-900">Actividades Satélites</h2>
+                <p class="text-stone-500 text-sm">Mantenimiento esencial para que el sistema funcione.</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm border border-stone-100 text-center">
+                <div class="text-2xl mb-2">🙏</div>
+                <h4 class="font-bold text-stone-800">Oración</h4>
+                <p class="text-xs text-stone-500">Conexión espiritual</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm border border-stone-100 text-center">
+                <div class="text-2xl mb-2">🎧</div>
+                <h4 class="font-bold text-stone-800">Inglés</h4>
+                <p class="text-xs text-stone-500">Listening / Absortismo</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm border border-stone-100 text-center">
+                <div class="text-2xl mb-2">👔</div>
+                <h4 class="font-bold text-stone-800">Organización</h4>
+                <p class="text-xs text-stone-500">Ropa y Agenda</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm border border-stone-100 text-center">
+                <div class="text-2xl mb-2">🎓</div>
+                <h4 class="font-bold text-stone-800">Universidad</h4>
+                <p class="text-xs text-stone-500">Ser un crack (Base)</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 py-8 border-t border-stone-800 mt-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="mb-2 font-medium text-white">"No hay derrota, solo aprendizaje."</p>
+            <p class="text-xs opacity-60">Sistema de Producción Diego &copy; 2025</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // --- 1. Routine Data & Logic ---
+        const routineData = {
+            morning: {
+                title: "🌅 La Mañana Sagrada",
+                subtitle: "Activación Inmediata",
+                steps: [
+                    { icon: "🙏", title: "Oración Inmediata", desc: "Alinear mente y espíritu antes de tocar el celular." },
+                    { icon: "⚡", title: "Activación", desc: "Ir directo a Clases (Foco Láser) o al Gym, sin dudar. Cero fricción." }
+                ],
+                quote: "Tu mañana determina tu victoria."
+            },
+            day: {
+                title: "☀️ Bloque de Guerra",
+                subtitle: "Producción & Absortismo",
+                steps: [
+                    { icon: "🎧", title: "Absortismo", desc: "En cardio o tiempos muertos: Podcast en Inglés." },
+                    { icon: "💻", title: "Bloque Principal", desc: "Energía creativa dedicada a crear pieza de Portafolio." }
+                ],
+                quote: "Crea, no solo consumas."
+            },
+            night: {
+                title: "🌙 Ritual Nocturno",
+                subtitle: "Preparar el Éxito de Mañana",
+                steps: [
+                    { icon: "👕", title: "Eliminar Fricción", desc: "Dejar lista la ropa del gym y la mochila." },
+                    { icon: "🧘‍♂️", title: "Meditación de Enfoque", desc: "Visualizar exactamente qué quiero lograr mañana antes de dormir." }
+                ],
+                quote: "El día de mañana se gana hoy por la noche."
+            }
+        };
+
+        function switchRoutine(timeOfDay) {
+            // Update UI Tabs
+            document.querySelectorAll('button[id^="tab-"]').forEach(btn => {
+                btn.classList.remove('active-tab');
+                btn.classList.add('inactive-tab');
+            });
+            document.getElementById(`tab-${timeOfDay}`).classList.add('active-tab');
+            document.getElementById(`tab-${timeOfDay}`).classList.remove('inactive-tab');
+
+            // Render Content
+            const data = routineData[timeOfDay];
+            const contentDiv = document.getElementById('routine-content');
+            
+            let stepsHtml = data.steps.map(step => `
+                <div class="flex items-start p-4 bg-stone-50 rounded-lg border border-stone-100 mb-3">
+                    <div class="text-2xl mr-4">${step.icon}</div>
+                    <div>
+                        <h4 class="font-bold text-stone-900">${step.title}</h4>
+                        <p class="text-sm text-stone-600">${step.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            contentDiv.innerHTML = `
+                <div class="animate-fade-in-up">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-stone-900">${data.title}</h3>
+                        <p class="text-amber-600 font-medium uppercase text-xs tracking-wider">${data.subtitle}</p>
+                    </div>
+                    <div class="space-y-2 mb-6">
+                        ${stepsHtml}
+                    </div>
+                    <div class="text-center border-t border-stone-100 pt-4">
+                        <p class="italic text-stone-500 text-sm">"${data.quote}"</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize Routine
+        switchRoutine('morning');
+
+
+        // --- 2. Chart.js Configuration ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('prioritiesChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Portafolio (Freelance)', 'Muscle Diego', 'Ingeniería (Base)', 'Sistematización'],
+                    datasets: [{
+                        data: [40, 30, 20, 10], // Estimated weights based on hierarchy
+                        backgroundColor: [
+                            '#4f46e5', // Indigo (Business)
+                            '#10b981', // Emerald (Health)
+                            '#64748b', // Slate (Base)
+                            '#f59e0b'  // Amber (System)
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: "'Inter', sans-serif",
+                                    size: 11
+                                },
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + context.label + ': ' + context.raw + '% de Enfoque';
+                                }
+                            },
+                            backgroundColor: '#1c1917',
+                            padding: 12,
+                            titleFont: { family: "'Inter', sans-serif" },
+                            bodyFont: { family: "'Inter', sans-serif" }
+                        }
+                    }
+                }
+            });
+        });
+
+
+        // --- 3. Habit Tracker Logic ---
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('.habit-checkbox');
+            const total = checkboxes.length;
+            let checked = 0;
+
+            checkboxes.forEach(box => {
+                if(box.checked) checked++;
+            });
+
+            const percentage = Math.round((checked / total) * 100);
+            const textEl = document.getElementById('progress-text');
+            const msgEl = document.getElementById('progress-message');
+
+            // Animate number
+            textEl.innerText = `${percentage}%`;
+            
+            // Update message and color
+            if (percentage === 100) {
+                textEl.classList.remove('text-white');
+                textEl.classList.add('text-amber-500');
+                msgEl.innerText = "¡Día Ganado! Misión cumplida. 🦁";
+                msgEl.classList.add('text-amber-400');
+            } else if (percentage > 50) {
+                textEl.classList.remove('text-amber-500');
+                textEl.classList.add('text-white');
+                msgEl.innerText = "Vas por buen camino. Sigue empujando.";
+                msgEl.classList.remove('text-amber-400');
+            } else {
+                textEl.classList.remove('text-amber-500');
+                textEl.classList.add('text-white');
+                msgEl.innerText = "Marca tus hábitos para ganar el día.";
+                msgEl.classList.remove('text-amber-400');
+            }
+        }
+
+        // Add minimal animation style
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fadeInUp {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fade-in-up {
+                animation: fadeInUp 0.4s ease-out forwards;
+            }
+        `;
+        document.head.appendChild(style);
+
+    </script>
+</body>
+</html>
